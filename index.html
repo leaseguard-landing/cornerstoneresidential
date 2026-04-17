@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strategic Analysis for Cornerstone Residential | LeaseGuard</title>
+    <style>
+      :root {
+        --bg: #081b4b;
+        --card: rgba(255, 255, 255, 0.08);
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+        --line: rgba(255, 255, 255, 0.12);
+        --gold: #f4c21c;
+        --gold-soft: rgba(244, 194, 28, 0.18);
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+        --max: 1240px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(244, 194, 28, 0.12), transparent 26%),
+          radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.06), transparent 24%),
+          linear-gradient(180deg, #091836 0%, var(--bg) 44%, #06153b 100%);
+      }
+
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+      .shell { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(16px);
+        background: rgba(7, 20, 51, 0.95);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 16px 0;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        width: min(100%, 330px);
+      }
+      .brand img {
+        width: 100%;
+        max-width: 330px;
+        height: auto;
+        object-fit: contain;
+        background: transparent;
+      }
+      .mobile-top-nav { display: none; }
+
+      .intro-wrap { padding-top: 28px; }
+      .intro-card,
+      .card,
+      .summary-card,
+      .cta-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .intro-card {
+        padding: 22px 24px;
+        background: linear-gradient(180deg, rgba(244,194,28,0.16), rgba(255,255,255,0.04));
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: #fde68a;
+        background: var(--gold-soft);
+        border: 1px solid rgba(244, 194, 28, 0.26);
+        border-radius: 999px;
+        padding: 10px 14px;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 4.6vw, 44px);
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+      }
+      .lede {
+        margin-top: 12px;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--muted);
+      }
+      .intro-grid {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 20px;
+        margin-top: 16px;
+        align-items: start;
+      }
+      .intro-side {
+        display: grid;
+        gap: 16px;
+      }
+      .intro-logo-wrap {
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 22px;
+        background: rgba(255,255,255,0.06);
+        padding: 18px;
+      }
+      .intro-logo-wrap img {
+        width: 100%;
+        max-width: 460px;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 28px;
+        padding: 18px 0 56px;
+      }
+      .sidebar {
+        position: sticky;
+        top: 92px;
+        align-self: start;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: rgba(255,255,255,0.04);
+        padding: 14px;
+      }
+      .tab-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 16px;
+        padding: 14px 16px;
+        text-align: left;
+        font: inherit;
+        cursor: pointer;
+        transition: 180ms ease;
+      }
+      .tab-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+      .tab-btn.active { background: rgba(244,194,28,0.15); color: #fff; }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.28);
+        flex: 0 0 auto;
+      }
+      .tab-btn.active .dot { background: var(--gold); }
+
+      .panel { display: none; }
+      .panel.active { display: block; }
+      .section-head { max-width: 920px; }
+      .section-kicker {
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: #fde68a;
+      }
+      .section-title {
+        margin: 14px 0 0;
+        font-size: clamp(30px, 4vw, 44px);
+        letter-spacing: -0.03em;
+      }
+      .section-text {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.8;
+      }
+      .stack-xxl > * + * { margin-top: 28px; }
+      .stack-lg > * + * { margin-top: 18px; }
+      .grid-2, .grid-3, .grid-4 { display: grid; gap: 18px; }
+      .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .card, .summary-card, .cta-card { padding: 26px; }
+      .card-title { margin: 0; font-size: 22px; }
+      .muted { color: var(--muted); line-height: 1.75; }
+      .metric-label {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #c7d2fe;
+        line-height: 1.45;
+      }
+      .metric-value {
+        margin-top: 10px;
+        font-size: clamp(22px, 2vw, 28px);
+        font-weight: 700;
+        line-height: 1.18;
+        overflow-wrap: anywhere;
+      }
+      .metric-note {
+        margin-top: 8px;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .bullet-list { display: grid; gap: 14px; }
+      .bullet {
+        display: flex; gap: 12px; align-items: flex-start; color: var(--muted); line-height: 1.75;
+      }
+      .bullet-icon {
+        width: 22px; height: 22px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+        background: rgba(244,194,28,0.14); color: var(--gold); font-size: 13px; font-weight: 700; flex: 0 0 auto; margin-top: 2px;
+      }
+      .step-card {
+        display: flex; gap: 14px; align-items: flex-start; background: rgba(4,12,34,0.42);
+        border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px;
+      }
+      .step-index {
+        width: 34px; height: 34px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+        background: rgba(244,194,28,0.14); color: #fde68a; font-weight: 700; flex: 0 0 auto;
+      }
+      .step-title { margin: 0; font-size: 19px; }
+      .step-text { margin-top: 8px; color: var(--muted); line-height: 1.75; }
+
+      .sequence-wrap {
+        display: grid;
+        gap: 18px;
+      }
+      .sequence-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 22px;
+        border: 1px solid rgba(244, 194, 28, 0.22);
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, rgba(244,194,28,0.14), rgba(255,255,255,0.04));
+      }
+      .sequence-label {
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: #fde68a;
+      }
+      .sequence-line {
+        flex: 1 1 auto;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(244,194,28,0.35), rgba(255,255,255,0.08));
+      }
+      .sequence-subtext {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .sequence-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+        align-items: stretch;
+      }
+      .sequence-card {
+        position: relative;
+        min-height: 100%;
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(4,12,34,0.34));
+        box-shadow: var(--shadow);
+        grid-column: span 2;
+      }
+      .sequence-step {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(244,194,28,0.14);
+        color: #fde68a;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      .sequence-title {
+        margin: 0;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+      .sequence-text {
+        margin-top: 12px;
+        color: var(--muted);
+        line-height: 1.8;
+        font-size: 15px;
+      }
+
+      .phase-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(4,12,34,0.34));
+        box-shadow: var(--shadow);
+        padding: 26px;
+      }
+      .phase-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #fde68a;
+        background: rgba(244,194,28,0.14);
+        border: 1px solid rgba(244,194,28,0.22);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+      .phase-title {
+        margin: 14px 0 0;
+        font-size: 28px;
+        letter-spacing: -0.03em;
+      }
+      .phase-intro {
+        margin-top: 12px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .cta-card { background: linear-gradient(180deg, rgba(244,194,28,0.2), rgba(255,255,255,0.05)); }
+      .cta-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 22px; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; padding: 14px 20px; font-weight: 700; transition: 180ms ease;
+      }
+      .btn-primary { background: var(--gold); color: #18284f; }
+      .btn-secondary { border: 1px solid rgba(255,255,255,0.18); color: #fff; background: rgba(255,255,255,0.05); }
+      .contact-list { display: grid; gap: 8px; margin-top: 16px; color: var(--muted); line-height: 1.8; }
+
+      .terms-grid { display: grid; gap: 18px; }
+      .terms-combo-stack {
+        display: grid;
+        gap: 24px;
+      }
+      .product-section {
+        display: grid;
+        gap: 18px;
+      }
+      .product-section-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        border: 1px solid rgba(244,194,28,0.18);
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(244,194,28,0.12), rgba(255,255,255,0.03));
+        padding: 22px;
+      }
+      .product-section-copy {
+        max-width: 860px;
+      }
+      .product-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #fde68a;
+        background: rgba(244,194,28,0.14);
+        border: 1px solid rgba(244,194,28,0.22);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+      .product-section-title {
+        margin: 14px 0 0;
+        font-size: 30px;
+        letter-spacing: -0.03em;
+      }
+      .product-section-text {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+      .term-option {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(4,12,34,0.34));
+        box-shadow: var(--shadow);
+        padding: 26px;
+      }
+      .term-option-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .term-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #fde68a;
+        background: rgba(244,194,28,0.14);
+        border: 1px solid rgba(244,194,28,0.22);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+      .term-title {
+        margin: 0;
+        font-size: 28px;
+        letter-spacing: -0.03em;
+      }
+      .term-subtitle {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .term-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+      }
+      .term-meta-grid-wide {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .term-meta-item {
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.04);
+        padding: 18px;
+        min-width: 0;
+      }
+      .term-meta-label {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c7d2fe;
+      }
+      .term-meta-value {
+        margin-top: 10px;
+        font-size: 18px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+      .term-stack > * + * { margin-top: 18px; }
+      .term-note {
+        border-left: 3px solid var(--gold);
+        padding: 12px 0 12px 16px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .checklist {
+        display: grid;
+        gap: 12px;
+      }
+      .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .checklist-mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(244,194,28,0.14);
+        color: var(--gold);
+        font-size: 13px;
+        font-weight: 700;
+        flex: 0 0 auto;
+        margin-top: 2px;
+      }
+      .mini-kicker {
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #fde68a;
+      }
+      .terms-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .detail-list {
+        display: grid;
+        gap: 10px;
+      }
+      .detail-list-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(140px, 0.9fr);
+        gap: 14px;
+        padding: 0 18px 8px;
+        color: #c7d2fe;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .detail-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(140px, 0.9fr);
+        gap: 14px;
+        align-items: start;
+        padding: 16px 18px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.04);
+      }
+      .detail-row-total {
+        border-color: rgba(244,194,28,0.24);
+        background: linear-gradient(180deg, rgba(244,194,28,0.16), rgba(255,255,255,0.04));
+      }
+      .detail-row-label {
+        color: var(--text);
+        line-height: 1.65;
+      }
+      .detail-row-value {
+        color: #fff;
+        line-height: 1.65;
+        text-align: right;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+      .enhancement-card {
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 22px;
+        background: rgba(255,255,255,0.04);
+        padding: 24px;
+      }
+      .savings-note {
+        color: #fde68a;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1080px) {
+        .intro-grid, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+        .sequence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .sequence-card { grid-column: auto; }
+      }
+
+      @media (max-width: 640px) {
+        .shell { width: min(var(--max), calc(100% - 24px)); }
+        .card, .summary-card, .cta-card, .step-card, .sequence-card, .phase-card { padding: 22px; }
+        .brand { width: min(100%, 260px); }
+        .brand img { max-width: 260px; }
+        h1 { font-size: 34px; }
+        .layout { grid-template-columns: 1fr; gap: 18px; }
+        .sidebar { display: none; }
+        .topbar.mobile-nav-mode .brand { display: none; }
+        .topbar.mobile-nav-mode .topbar-inner { display: block; padding: 10px 0; }
+        .topbar .mobile-top-nav { display: none; }
+        .topbar.mobile-nav-mode .mobile-top-nav {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+        }
+        .topbar.mobile-nav-mode .mobile-top-nav .tab-btn {
+          width: 100%;
+          min-width: 0;
+          justify-content: center;
+          padding: 10px 6px;
+          text-align: center;
+          border-radius: 12px;
+          font-size: 12px;
+          line-height: 1.2;
+          gap: 0;
+          white-space: normal;
+        }
+        .term-option,
+        .product-section-head,
+        .enhancement-card,
+        .intro-logo-wrap { padding: 22px; }
+        .term-meta-grid,
+        .term-meta-grid-wide { grid-template-columns: 1fr; }
+        .term-option-head,
+        .terms-card-head,
+        .product-section-head { flex-direction: column; align-items: flex-start; }
+        .detail-list-header { display: none; }
+        .detail-row { grid-template-columns: 1fr; gap: 8px; }
+        .detail-row-value { text-align: left; }
+        .topbar.mobile-nav-mode .mobile-top-nav .dot { display: none; }
+        .sequence-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .sequence-line { display: none; }
+        .sequence-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="https://www.leaseguard.com" target="_blank" rel="noreferrer">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAAFoCAMAAAAea4q8AAADAFBMVEUAAAD9yAD////9yQADFmH9ywD8wAD///39yACxvw3fzADa1ATx9vr7/P35/P75/Pn9yQDz9Pv9+v74/Pn3+/j5/Pj6/Pn8/Pv++/v+/Pv6/fj5/Pj8/fv9/fz8+v/39/3///39yQD//fX7/P/+/f359/zz5H3q3Xfy4mbz6abx2VH++fD28tz+/v79//78+/b39vP18+n08unx4Fr29O7768f2+ebw4kP4+vj28dz6+fD49+734ZL6+e72+eT5+O/7+/r28tv28uP+6sH1+9L29N75+fL48vD39+z6+fD27dn6+u/49+b5+PD39uz1+9T49+f7+vT7+vT49+b39Oz4+O70+tT6+fD28tt+eHj49+T39Oz28ttvfnz29dz39+z7/P779+f8+/X5+PD39u3z3nP4+vj9/f35+fD7+vT++/n9/fv4+O73+t79//z9/vz8+/b7/P/4+O74+vj29N78+/X49+f39Oz39u3z3nL4+vr28N34+PX39u3fzm/49+j29t/y4mb39Oz29N3++/v6+PD39uz4+O74+vj4+fD5+fH7+vT49+b49+b49+b8+/b39uz4+fH49+b39uv6+e/39+v39+v49+b39uv29N359/H39uv+/Pz39+z39uv39+z39ur39+v39+v39ur39+v39+v49+b39uz29tt0goDf0W7bzwXJvQ7ZzAbj1gXa0gb53ATVzwhXXGLo3m7w22L+s0D/kATzkAPAiBfvaQrq3m3f0m27wgPr3GqmnAW3xwbc0waSiRjf0WH0+ej6/Pv6/Ps4QWnf0W7Bvw1aanvIxw7i1gXayAbh1wXKvg6+uw3UyQjd0l6okQfVzgj44AP41AT53AT53ASnjQfaygaRrQaOkAfayAbd0mB5nD7p3XfJvQ7Vygjz+vz5/Pv4+/s2Pms5QWje0W7TyQihjwjWygjUyQje0l4+RGjk13vNvw9ZWmjz7qzLvw6bhwf53AT53ASRrQa5tQ1aanq5tA28uQ2jjwjMzsiNiYikjwi+ug2+uw30+eg1Ol89R2jIkQfczwfHuw6siQjh1wXw2l+PiYbUygfCvg3j1gWDhoGNjIiYkQelohFWWWeXkY2fn5+3tr63trV4eXqWlpaOj4/r6+z5+PjMzMzo6Ojg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" alt="LeaseGuard" />
+        </a>
+        <div class="mobile-top-nav" aria-label="Mobile section navigation">
+          <button class="tab-btn active" data-tab="overview" type="button"><span class="dot"></span><span>Overview</span></button>
+          <button class="tab-btn" data-tab="economics" type="button"><span class="dot"></span><span>NOI Framework</span></button>
+          <button class="tab-btn" data-tab="analysis" type="button"><span class="dot"></span><span>Strategic Analysis</span></button>
+          <button class="tab-btn" data-tab="operations" type="button"><span class="dot"></span><span>Operational Rollout</span></button>
+          <button class="tab-btn" data-tab="terms" type="button"><span class="dot"></span><span>Terms</span></button>
+          <button class="tab-btn" data-tab="connect" type="button"><span class="dot"></span><span>Connect with Ryen</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="shell intro-wrap">
+      <div class="intro-card">
+        <div class="eyebrow">Strategic Analysis for Cornerstone Residential</div>
+        <div class="intro-grid">
+          <div>
+            <h1>Consolidating LeasePro, Verification, and Monitoring Under One Provider</h1>
+            <p class="lede">
+              Cornerstone is already operating at scale across more than 200 communities and 20,000+ units. The opportunity here is not to introduce a new concept. It is to simplify the operating model, preserve the lapsed coverage functionality they value today, and evaluate whether LeaseGuard can deliver stronger economics and a cleaner platform experience.
+            </p>
+          </div>
+          <div class="intro-side">
+            <div class="intro-logo-wrap">
+              <img src="data:image/webp;base64,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" alt="Cornerstone Residential" />
+            </div>
+            <div class="muted" style="font-size:15px; line-height:1.8;">
+              Cornerstone currently works with multiple providers, including Foxen, Asset Protect, and Risk Release. This analysis focuses specifically on a LeasePro structure with verification and monitoring designed to support a consolidated approach while maintaining 100% compliance through a lapsed coverage endorsement.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="shell layout">
+      <aside class="sidebar">
+        <button class="tab-btn active" data-tab="overview" type="button"><span class="dot"></span><span>Overview</span></button>
+        <button class="tab-btn" data-tab="economics" type="button"><span class="dot"></span><span>NOI Framework</span></button>
+        <button class="tab-btn" data-tab="analysis" type="button"><span class="dot"></span><span>Strategic Analysis</span></button>
+        <button class="tab-btn" data-tab="operations" type="button"><span class="dot"></span><span>Operational Rollout</span></button>
+        <button class="tab-btn" data-tab="terms" type="button"><span class="dot"></span><span>Terms</span></button>
+        <button class="tab-btn" data-tab="connect" type="button"><span class="dot"></span><span>Connect with Ryen</span></button>
+      </aside>
+
+      <main>
+        <section id="overview" class="panel active stack-xxl"></section>
+        <section id="economics" class="panel stack-xxl"></section>
+        <section id="analysis" class="panel stack-xxl"></section>
+        <section id="operations" class="panel stack-xxl"></section>
+        <section id="terms" class="panel stack-xxl"></section>
+        <section id="connect" class="panel stack-xxl"></section>
+      </main>
+    </section>
+
+    <script>
+      const estimatedUnits = 20000;
+      const estimatedAdoption = 0.52;
+      const estimatedUnitsOnRisk = Math.round(estimatedUnits * estimatedAdoption);
+      const estimatedNoiPerDoor = 7.76;
+      const estimatedMonthlyNoi = 81000;
+      const estimatedAnnualNoi = 968000;
+
+      const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      const currencyTwo = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const percent = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 0 });
+
+      function sectionHead(kicker, title, text) {
+        return `<div class="section-head"><div class="section-kicker">${kicker}</div><h2 class="section-title">${title}</h2><div class="section-text">${text}</div></div>`;
+      }
+      function card(title, body) {
+        return `<div class="card"><h3 class="card-title">${title}</h3><div class="muted" style="margin-top:12px;">${body}</div></div>`;
+      }
+      function bulletList(items) {
+        return `<div class="bullet-list">${items.map((item) => `<div class="bullet"><span class="bullet-icon">✓</span><span>${item}</span></div>`).join('')}</div>`;
+      }
+      function steps(items) {
+        return items.map((item, idx) => `<div class="step-card"><div class="step-index">${idx + 1}</div><div><h3 class="step-title">${item.title}</h3><div class="step-text">${item.text}</div></div></div>`).join('');
+      }
+      function metricCard(label, value, note) {
+        return `<div class="summary-card"><div class="metric-label">${label}</div><div class="metric-value">${value}</div><div class="metric-note">${note}</div></div>`;
+      }
+      function sequenceCards(items, labelText, subtext) {
+        return `
+          <div class="sequence-wrap">
+            <div class="sequence-header">
+              <div class="sequence-label">${labelText}</div>
+              <div class="sequence-line"></div>
+              <div class="sequence-subtext">${subtext}</div>
+            </div>
+            <div class="sequence-grid">
+              ${items.map((item, idx) => `
+                <div class="sequence-card">
+                  <div class="sequence-step">${idx + 1}</div>
+                  <h3 class="sequence-title">${item.title}</h3>
+                  <div class="sequence-text">${item.text}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      function summaryGrid(items, className = 'term-meta-grid') {
+        return `<div class="${className}">${items.map(([label, value]) => `
+          <div class="term-meta-item">
+            <div class="term-meta-label">${label}</div>
+            <div class="term-meta-value">${value}</div>
+          </div>
+        `).join('')}</div>`;
+      }
+      function checklist(items) {
+        return `<div class="checklist">${items.map((item) => `<div class="checklist-item"><span class="checklist-mark">✓</span><span>${item}</span></div>`).join('')}</div>`;
+      }
+      function makeDetailList(rows, labelTitle = 'Coverage', valueTitle = 'Value') {
+        return `
+          <div class="detail-list">
+            <div class="detail-list-header">
+              <div>${labelTitle}</div>
+              <div style="text-align:right;">${valueTitle}</div>
+            </div>
+            ${rows.map(([label, value]) => {
+              const isTotal = /total/i.test(String(label));
+              return `
+                <div class="detail-row ${isTotal ? 'detail-row-total' : ''}">
+                  <div class="detail-row-label">${label}</div>
+                  <div class="detail-row-value">${value}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>`;
+      }
+
+      function renderOverview() {
+        document.getElementById('overview').innerHTML = `
+          ${sectionHead(
+            'Current opportunity',
+            'A Consolidation Conversation, Not a Cold Start',
+            'Cornerstone already understands the value of resident risk programs and ongoing compliance management. The decision point is whether LeaseGuard can consolidate that effort under one provider with strong coverage, ongoing verification and monitoring, partner portal visibility, and improved economics.'
+          )}
+          <div class="grid-4">
+            ${metricCard('$100K-$500K', 'Tenant Liability Coverage', 'Available limit options based on structure and underwriting direction.')}
+            ${metricCard('Industry-leading', 'Coverage Enhancements', 'Built to strengthen the resident risk solution beyond basic limit-only comparisons.')}
+            ${metricCard('Integration Hub', 'PMS Connectivity', 'Structured to support RealPage and other operational workflows through LeaseGuard integration capabilities.')}
+            ${metricCard('15% - 20%', 'Potential Savings*', '*See Terms for current illustrative cost range and savings discussion.')}
+          </div>
+          <div class="grid-2">
+            ${card(
+              'Why LeaseGuard for Cornerstone',
+              `${bulletList([
+                'One provider for LeasePro, verification, and monitoring.',
+                'Lapsed coverage endorsement available to support 100% compliance.',
+                'Structured for portfolios operating at institutional scale.',
+                'Built for property managers and ownership groups looking to reduce admin friction.'
+              ])}`
+            )}
+            ${card(
+              'LeaseGuard Partner Portal',
+              `${bulletList([
+                'Portfolio to community to resident-level visibility.',
+                'Claims submission and status tracking in one place.',
+                'Access to policy documents and executed service agreements.',
+                'Cleaner reporting for Cornerstone operations and leadership teams.'
+              ])}`
+            )}
+          </div>
+        `;
+      }
+
+      function renderEconomics() {
+        document.getElementById('economics').innerHTML = `
+          ${sectionHead(
+            'Estimated economics',
+            'Estimated NOI Framework',
+            'This framework is intended to show the scale of the opportunity using the assumptions provided here. It is not meant to represent a final adopted structure and should be refined once the current resident charge and spread are confirmed.'
+          )}
+          <div class="grid-4">
+            ${metricCard('Estimated unit count', estimatedUnits.toLocaleString(), 'Portfolio assumption used for the framework.')}
+            ${metricCard('Estimated adoption rate', percent.format(estimatedAdoption), `${estimatedUnitsOnRisk.toLocaleString()} participating units at the illustrated adoption level.`)}
+            ${metricCard('Estimated monthly NOI', currency.format(estimatedMonthlyNoi), `Using ${currencyTwo.format(estimatedNoiPerDoor)} per participating door per month.`)}
+            ${metricCard('Estimated annual NOI', '$968K', 'Illustrative annualized NOI based on the estimated monthly framework.')}
+          </div>
+          <div class="grid-2">
+            ${card(
+              'What the comparison needs to prove',
+              `${bulletList([
+                'That LeaseGuard can preserve the compliance functionality Cornerstone values today.',
+                'That verification and monitoring can remain dependable at scale.',
+                'That consolidation under one provider creates a cleaner operating model.',
+                'That the structure delivers improved economics and improved value.'
+              ])}`
+            )}
+            ${card(
+              'Current benchmark being evaluated',
+              `${bulletList([
+                'Current participating unit cost of $8.00 for $100,000 of Tenant Legal Liability.',
+                'Risk Release is known to provide verification and monitoring today.',
+                'Cornerstone is pleased with the lapsed coverage functionality currently being offered.',
+                'Adoption rate, resident rate, and retained spread still need to be confirmed.'
+              ])}`
+            )}
+          </div>
+        `;
+      }
+
+      function renderAnalysis() {
+        document.getElementById('analysis').innerHTML = `
+          ${sectionHead(
+            'Strategic analysis',
+            'How Cornerstone Can Evaluate a Move to LeaseGuard',
+            'This stage is about validating the current structure, confirming what must be preserved, and determining whether a consolidated LeaseGuard solution creates enough operational and economic value to justify a change.'
+          )}
+          ${sequenceCards([
+            {
+              title: 'Confirm current structure',
+              text: 'Validate the current Risk Release framework, including limits, endorsements, covered enhancements, adoption mechanics, resident billing approach, and the exact way lapsed coverage is functioning today.'
+            },
+            {
+              title: 'Pressure test the consolidation case',
+              text: 'Review how LeaseGuard can replace a multi-provider structure with a more unified LeasePro, verification, and monitoring model while preserving the compliance outcomes Cornerstone values.'
+            },
+            {
+              title: 'Compare economics and platform value',
+              text: 'Measure the current $8.00 participating unit cost against LeaseGuard terms, partner portal visibility, RealPage integration capabilities, and overall operating simplicity.'
+            },
+            {
+              title: 'Decide whether the move is justified',
+              text: 'If the value case is compelling, the parties can shift into implementation planning. If not, Cornerstone has still established a clean benchmark for future decisions.'
+            }
+          ], '4-Step Review', 'A focused diligence process before implementation work begins.')}
+          <div class="card">
+            <h3 class="card-title">What needs to be confirmed</h3>
+            <div style="margin-top:14px;">
+              ${bulletList([
+                'Current adoption rate across the portfolio.',
+                'Current resident rate being charged and the retained spread.',
+                'Exact coverage enhancements and endorsements being delivered today.',
+                'Current notice requirements and any operational transition considerations.',
+                'Whether all desired provider functions can be fully consolidated under the preferred future-state workflow.'
+              ])}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderOperations() {
+        document.getElementById('operations').innerHTML = `
+          ${sectionHead(
+            'Operational rollout',
+            'Transition Framework',
+            'If Cornerstone elects to move forward, the implementation goal should be straightforward: preserve coverage continuity, align verification and monitoring workflows, and simplify provider management across the portfolio.'
+          )}
+          <div class="grid-2">
+            <div class="phase-card">
+              <div class="phase-label">Phase One</div>
+              <h3 class="phase-title">Design the Consolidated Model</h3>
+              <div class="phase-intro">Confirm the future-state structure before any transition timing is finalized.</div>
+              <div class="stack-lg" style="margin-top:18px;">
+                ${steps([
+                  { title: 'Finalize the target structure', text: 'Confirm the selected LeasePro option, verification and monitoring workflow, lapsed coverage endorsement, and the expected RealPage operating model.' },
+                  { title: 'Map current-state providers', text: 'Identify which functions are being handled by Foxen, Asset Protect, and Risk Release today and determine what will move, remain, or sunset.' },
+                  { title: 'Establish go-live sequencing', text: 'Set the timing, notice requirements, and responsibilities required to transition participating units without introducing a coverage gap.' }
+                ])}
+              </div>
+            </div>
+            <div class="phase-card">
+              <div class="phase-label">Phase Two</div>
+              <h3 class="phase-title">Roll Out and Stabilize</h3>
+              <div class="phase-intro">Move the portfolio into the new model and create reporting visibility quickly.</div>
+              <div class="stack-lg" style="margin-top:18px;">
+                ${steps([
+                  { title: 'Transition the participating population', text: 'Move the active participating units into the LeaseGuard framework with coordinated timing and resident communication as needed.' },
+                  { title: 'Launch ongoing monitoring', text: 'Activate verification and monitoring workflows designed to maintain compliance and support the lapsed coverage endorsement approach.' },
+                  { title: 'Use portal reporting to manage performance', text: 'Leverage the LeaseGuard Partner Portal for adoption visibility, claims reporting, and ongoing operational oversight.' }
+                ])}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderTerms() {
+        document.getElementById('terms').innerHTML = `
+          ${sectionHead(
+            'Illustrative proposal structure',
+            'Proposal Terms',
+            'One LeasePro structure is shown below for Cornerstone, inclusive of verification and monitoring services and positioned around the current information available today.'
+          )}
+          <div class="terms-combo-stack">
+            <div class="product-section">
+              <div class="product-section-head">
+                <div class="product-section-copy">
+                  <div class="product-chip">LeasePro</div>
+                  <h3 class="product-section-title">Cornerstone Proposal Terms</h3>
+                  <div class="product-section-text">A single LeasePro option built around $100,000 of Tenant Legal Liability, verification and monitoring services, RealPage integration support, LeaseGuard Partner Portal visibility, and the lapsed coverage functionality Cornerstone has identified as important.</div>
+                </div>
+              </div>
+
+              <div class="term-option">
+                <div class="term-option-head">
+                  <div>
+                    <div class="term-eyebrow">Option A</div>
+                    <h3 class="term-title" style="margin-top:14px;">$100,000 Tenant Legal Liability + Verification and Monitoring</h3>
+                    <div class="term-subtitle">Structured for Cornerstone Residential using a Markel-backed LeasePro format with the requested functionality and service components shown clearly.</div>
+                  </div>
+                </div>
+
+                <div class="term-stack">
+                  ${summaryGrid([
+                    ['Named Insured', 'Cornerstone Residential'],
+                    ['Insurer (A.M. Best)', 'Evanston Insurance Company (Markel)'],
+                    ['Product', 'LeasePro'],
+                    ['Included Services', 'Verification and Monitoring | RealPage Integration | LeaseGuard Partner Portal']
+                  ], 'term-meta-grid term-meta-grid-wide')}
+
+                  <div class="grid-2">
+                    <div class="card">
+                      <div class="terms-card-head"><div class="mini-kicker">Coverage</div></div>
+                      ${makeDetailList([
+                        ['Tenant Legal Liability', '$100,000'],
+                        ['Liability Deductible', '$0'],
+                        ['Verification and Monitoring Services', 'Included'],
+                        ['RealPage Integration', 'Included'],
+                        ['LeaseGuard Partner Portal', 'Included']
+                      ], 'Coverage', 'Limit / Status')}
+                    </div>
+
+                    <div class="card">
+                      <div class="terms-card-head"><div class="mini-kicker">Rate</div></div>
+                      ${makeDetailList([
+                        ['Tenant Legal Liability', '$5.50'],
+                        ['RPG/Admin Fee', '$1.00 - $1.50'],
+                        ['Surplus Lines Taxes', '$0.23'],
+                        ['Stamping Fee', '$0.01'],
+                        ['Total Per Unit Cost', '$6.74 - $7.24']
+                      ], 'Rate Component', 'Per Unit Cost')}
+                    </div>
+                  </div>
+
+                  <div class="enhancement-card">
+                    <div class="terms-card-head"><div class="mini-kicker">Coverage Enhancements</div></div>
+                    ${checklist([
+                      'Animal Liability $10K Sublimit',
+                      'Limited Bed Bug Remediation $1K Sublimit',
+                      'Loss of Rental Income $2K/$4K Sublimit',
+                      'Lapsed Coverage Endorsement'
+                    ])}
+                  </div>
+
+                  <div class="enhancement-card">
+                    <div class="terms-card-head"><div class="mini-kicker">Other LeaseGuard Products Available</div></div>
+                    ${checklist([
+                      'DepositPro | Security Deposit Alternative',
+                      'Renters Insurance',
+                      'Limited Contents Coverage'
+                    ])}
+                  </div>
+
+                  <div class="term-note">
+                    This structure is designed to compare favorably against the currently understood $8.00 participating unit cost while preserving the verification, monitoring, and lapsed coverage functionality that Cornerstone has indicated matters.
+                    <div class="savings-note" style="margin-top:10px;">Illustrative potential savings range aligns with the 15% - 20% opportunity shown elsewhere in this analysis and should be finalized once the current program details are fully validated.</div>
+                  </div>
+
+                  <div class="card">
+                    <div class="terms-card-head"><div class="mini-kicker">Subjectivities</div></div>
+                    ${checklist([
+                      'Favorable review of completed application and rent roll',
+                      'Completed digital signatures request',
+                      'Signed proposal',
+                      'Signed service agreement'
+                    ])}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderConnect() {
+        document.getElementById('connect').innerHTML = `
+          ${sectionHead(
+            'Next step',
+            'Schedule a Working Session with Ryen Edwards',
+            'The next conversation should focus on validating the current Cornerstone structure, pressure testing the consolidation case, and determining whether LeaseGuard can improve the economics and operating model.'
+          )}
+          <div class="cta-card">
+            <h3 class="card-title">Connect with LeaseGuard</h3>
+            <p class="muted" style="margin-top:14px;">
+              Ryen Edwards can walk through the current provider structure, implementation planning, and the LeasePro proposal in more detail.
+            </p>
+            <div class="contact-list">
+              <div><strong>Ryen Edwards</strong></div>
+              <div><a href="tel:8012437141">801.243.7141</a></div>
+              <div><a href="https://calendly.com/leaseguard-ryen/onboarding-call" target="_blank" rel="noreferrer">calendly.com/leaseguard-ryen/onboarding-call</a></div>
+            </div>
+            <div class="cta-actions">
+              <a class="btn btn-primary" href="https://calendly.com/leaseguard-ryen/onboarding-call" target="_blank" rel="noreferrer">Schedule a Call</a>
+              <a class="btn btn-secondary" href="tel:8012437141">Call Ryen</a>
+            </div>
+          </div>
+        `;
+      }
+
+      function initTabs() {
+        const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+        const panels = Array.from(document.querySelectorAll('.panel'));
+        const main = document.querySelector('main');
+        const topbar = document.querySelector('.topbar');
+
+        function activate(tab) {
+          buttons.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
+          panels.forEach((panel) => panel.classList.toggle('active', panel.id === tab));
+          if (main) {
+            const offset = window.innerWidth <= 640 ? 96 : 88;
+            const top = main.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        }
+
+        function syncMobileHeader() {
+          if (!topbar) return;
+          if (window.innerWidth > 640) {
+            topbar.classList.remove('mobile-nav-mode');
+            return;
+          }
+          if (window.scrollY > 110) topbar.classList.add('mobile-nav-mode');
+          else topbar.classList.remove('mobile-nav-mode');
+        }
+
+        buttons.forEach((btn) => btn.addEventListener('click', () => activate(btn.dataset.tab)));
+        window.addEventListener('scroll', syncMobileHeader, { passive: true });
+        window.addEventListener('resize', syncMobileHeader);
+        syncMobileHeader();
+      }
+
+      function init() {
+        renderOverview();
+        renderEconomics();
+        renderAnalysis();
+        renderOperations();
+        renderTerms();
+        renderConnect();
+        initTabs();
+      }
+
+      init();
+    </script>
+  </body>
+</html>
